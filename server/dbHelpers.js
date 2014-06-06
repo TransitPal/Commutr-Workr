@@ -1,9 +1,9 @@
 var db = require('mongoose');
 
-exports.getUserLocations = function(email){
-  return db.models.User.findOne({email:email}).select('homeLocation workLocation').exec();
+exports.getUsersList = function(){
+  return db.models.User.find().select('email').exec();
 };
 
 exports.getUser = function(email) {
-  return db.models.User.findOne({email: email}).exec();
+  return db.models.User.findOne({email: email}).select('locations routine').exec();
 };

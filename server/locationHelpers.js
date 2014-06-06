@@ -74,7 +74,6 @@ var averageLocation = function (locations){
     lat: latSum/locations.length,
     lng: lngSum/locations.length
   };
-
   return centralLoc;
 };
 
@@ -86,9 +85,9 @@ var findGnome = function (userId){
     .then(function(user){
       console.log('User: ', user);
     }, function(err){
-      console.error(err);
+      console.error('Error saving new home location', err);
     });
-  })
+  });
 };
 
 var findWork = function (userId){
@@ -99,7 +98,19 @@ var findWork = function (userId){
     .then(function(user){
       console.log('User: ', user);
     }, function(err){
-      console.error(err);
+      console.error('Error saving new work location', err);
     });
-  })
+  });
 };
+
+var updateUsersLocations = function(){
+  db.getUsersList()
+    .then(function(users){
+      for(var i = 0; i < users.length; i++){
+        findGnome(users[i].email);
+        findWork(users[i].email);
+      }
+    }, function(err){
+      console.error('Error retrieving all users', err);
+    });
+}
