@@ -80,6 +80,7 @@ var averageLocation = function (locations){
 var findGnome = function (userId){
   db.getUser(userId)
   .then(function(user){
+    // Calculate new home location
     user.homeLocation = findCenter(user.locations, 1, 23, 4);
     user.save().exec()
     .then(function(user){
@@ -93,7 +94,11 @@ var findGnome = function (userId){
 var findWork = function (userId){
   db.getUser(userId)
   .then(function(user){
+    // Calculate new work location
     user.workLocation = findCenter(user.locations, 1, 10, 16);
+    //Delete all data older than 1 month
+    deleteOldData(user.locations, 1);
+
     user.save().exec()
     .then(function(user){
       console.log('User: ', user);
@@ -102,6 +107,23 @@ var findWork = function (userId){
     });
   });
 };
+
+var deleteOldData = function(locations, monthsToKeep){
+  locations.sort(function(a,b){
+    return b.time - a.time;
+  });
+  // convert monthsToKeep to milliseconds
+  var monthsToKeep *= 2629740000;
+  var reduction = 0;
+  for(var i = locations.length - 1; i >= 0; i--){
+    if(new Date() - locations[i].time > monthsToKeep){
+      reduction++;
+    } else {
+      locations.length -= reduction;
+      break;
+    }
+  }
+}
 
 var updateUsersLocations = function(){
   db.getUsersList()
@@ -114,3 +136,5 @@ var updateUsersLocations = function(){
       console.error('Error retrieving all users', err);
     });
 }
+
+setTimeout(updateUsersLocations, 86400000);
