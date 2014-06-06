@@ -114,9 +114,10 @@ var deleteOldData = function(locations, monthsToKeep){
   });
   // convert monthsToKeep to milliseconds
   var monthsToKeep *= 2629740000;
+  var now = new Date()
   var reduction = 0;
   for(var i = locations.length - 1; i >= 0; i--){
-    if(new Date() - locations[i].time > monthsToKeep){
+    if(now - locations[i].time > monthsToKeep){
       reduction++;
     } else {
       locations.length -= reduction;
@@ -137,4 +138,4 @@ var updateUsersLocations = function(){
     });
 }
 
-setTimeout(updateUsersLocations, 86400000);
+setInterval(updateUsersLocations, 86400000);
