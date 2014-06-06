@@ -113,7 +113,7 @@ var deleteOldData = function(locations, monthsToKeep){
     return b.time - a.time;
   });
   // convert monthsToKeep to milliseconds
-  var monthsToKeep *= 2629740000;
+  monthsToKeep *= 2629740000;
   var now = new Date()
   var reduction = 0;
   for(var i = locations.length - 1; i >= 0; i--){
