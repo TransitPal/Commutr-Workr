@@ -5,7 +5,9 @@ var helpers = require('./routeHelpers');
 
 require('./config.js')(app, express, routers);
 
-// Refactor complete
+require('./locationHelpers');
+
+
 app.get('/', helpers.placeholder);
 
 module.exports = app;
